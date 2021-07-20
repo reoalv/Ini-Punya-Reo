@@ -8,7 +8,7 @@ import {allReducer} from './allReducer';
 
 const persistConfig = {
   key: 'ToDo',
-  Storage: Storage,
+  storage: Storage,
 };
 
 const persistedReducer = persistReducer(persistConfig, allReducer);
