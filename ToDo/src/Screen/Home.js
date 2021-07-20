@@ -1,5 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,16 +17,19 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import {useDispatch, useSelector} from 'react-redux';
 import {getHome} from '../Redux/actionHome';
 import Poppin from '../Component/Poppin';
+import {PopUp, ModalInput} from '../Component/Modal';
 
 export default function Home() {
   const dispatch = useDispatch();
+  const [ModalVisible, setModalVisible] = useState(false);
+  const [ModalInputVisible, setModalInputVisible] = useState(false);
+  const [DataModal, setDataModal] = useState({});
 
   useEffect(() => {
     dispatch(getHome());
   }, []);
 
   const DataReducerHome = useSelector(state => state.ReducerHome?.data);
-  console.log(DataReducerHome[0].title, 'DATA REDUCER HOME');
   return (
     <View style={styles.outerContainer}>
       <Header />
@@ -34,13 +38,20 @@ export default function Home() {
           {DataReducerHome.map((e, i) => {
             console.log(e.title, 'INI TESTT');
             return (
-              <View key={i} style={styles.containerCard}>
+              <TouchableOpacity
+                onPress={() => {
+                  setDataModal(e, i);
+                  setModalVisible(true);
+                }}
+                activeOpacity={0.9}
+                key={i}
+                style={styles.containerCard}>
                 <View
                   style={{
                     backgroundColor:
-                      i % 4 == 0
+                      e.id % 3 == 0
                         ? '#ff8a65'
-                        : i % 3 == 0
+                        : e.id % 2 == 0
                         ? '#ba68c8'
                         : '#37d67a',
                     flex: 1,
@@ -59,14 +70,32 @@ export default function Home() {
                     {e.body}
                   </Poppin>
                 </View>
-              </View>
+              </TouchableOpacity>
             );
           })}
         </View>
       </ScrollView>
-      <TouchableOpacity activeOpacity={0.9} style={styles.addNew}>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        style={styles.addNew}
+        onPress={() => setModalInputVisible(true)}>
         <Fontisto name="plus-a" size={40} color="#19222c" />
       </TouchableOpacity>
+
+      {/* MODAL */}
+      <PopUp
+        visible={ModalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
+        data={DataModal}
+      />
+      <ModalInput
+        visibleInput={ModalInputVisible}
+        onRequestCloseInput={() => {
+          setModalInputVisible(false);
+        }}
+      />
     </View>
   );
 }
@@ -93,7 +122,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(30),
     backgroundColor: '#acb8c5',
     position: 'absolute',
-    zIndex: 100,
+    zIndex: 50,
     bottom: moderateScale(20),
     right: moderateScale(20),
     alignItems: 'center',
