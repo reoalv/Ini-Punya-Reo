@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import {
   heightPercentageToDP,
@@ -16,9 +17,35 @@ import {moderateScale} from 'react-native-size-matters';
 import Poppin from './Poppin';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Feather from 'react-native-vector-icons/Feather';
+import {useDispatch} from 'react-redux';
+import {setRemove} from '../Redux/actionHome';
 
-export function PopUp({visible, onRequestClose, data}) {
+export function PopUp({visible, onRequestClose, data, onClose}) {
+  const [dataDelete, setDataDelete] = useState({});
+  const dispatch = useDispatch();
+  const deleting = () => {
+    dispatch(setRemove(dataDelete));
+    onClose();
+  };
   console.log(data.id);
+
+  const optionAlert = () => {
+    setDataDelete(data),
+      Alert.alert(
+        'Delete',
+        'Do You Want Delete This?',
+        [
+          {
+            text: 'No',
+            onPress: () => console.log('Pressed No'),
+            style: 'cancel',
+          },
+          {text: 'Yes', onPress: deleting},
+        ],
+        {cancelable: true},
+      );
+  };
+
   return (
     <Modal
       animationType="fade"
@@ -44,7 +71,24 @@ export function PopUp({visible, onRequestClose, data}) {
             <Poppin style={styles.title} type="Medium" size={16}>
               {data.title}
             </Poppin>
-            <TouchableOpacity style={styles.trash}>
+            <TouchableOpacity
+              onPress={() => {
+                setDataDelete(data),
+                  Alert.alert(
+                    'Delete',
+                    'Do You Want Delete This?',
+                    [
+                      {
+                        text: 'No',
+                        onPress: () => console.log('Pressed No'),
+                        style: 'cancel',
+                      },
+                      {text: 'Yes', onPress: deleting},
+                    ],
+                    {cancelable: true},
+                  );
+              }}
+              style={styles.trash}>
               <FontAwesome5 name="trash" size={20} />
             </TouchableOpacity>
           </View>
@@ -63,6 +107,7 @@ export function ModalInput({
   onRequestCloseInput,
   onChangeTextTitle,
   onChangeTextBody,
+  onPress,
 }) {
   return (
     <Modal
@@ -98,7 +143,10 @@ export function ModalInput({
               />
             </View>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity activeOpacity={0.8} style={styles.button}>
+              <TouchableOpacity
+                onPress={onPress}
+                activeOpacity={0.8}
+                style={styles.button}>
                 <Feather name="check" size={25} color="white" />
               </TouchableOpacity>
             </View>

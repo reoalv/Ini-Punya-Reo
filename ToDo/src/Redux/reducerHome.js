@@ -1,8 +1,12 @@
-import {REMOVE_HOME, SET_HOME} from './actionHome';
+import {ADD_ITEM, REMOVE_HOME, SET_HOME} from './actionHome';
 
 const initialState = {
   data: [],
 };
+
+/* KARENA PAKE FAKE API KALO DI DELETE/POST API NYA GAK UPDATE
+JADI SAYA AKALIN LANGSUNG LEMPAR KE REDUCER JUGA
+SUPAYA SECARA TAMPILAN JUGA UPDATE */
 
 const reducerHome = (state = initialState, action) => {
   switch (action.type) {
@@ -11,13 +15,16 @@ const reducerHome = (state = initialState, action) => {
         ...state,
         data: action.payload,
       };
-    case REMOVE_HOME:
+    case ADD_ITEM:
       return {
         ...state,
-        data: [
-          ...state.data.slice(0, action.payload),
-          ...state.data.slice(action.payload + 1),
-        ],
+        data: [...state.data, action.payload],
+      };
+    case REMOVE_HOME:
+      console.log(action.payload, 'INI REDUCER');
+      return {
+        ...state,
+        data: state.data.filter(i => i.id !== action.payload.id),
       };
     default:
       return state;

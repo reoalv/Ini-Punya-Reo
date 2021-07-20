@@ -15,7 +15,7 @@ import {moderateScale} from 'react-native-size-matters';
 import Header from '../Component/Header';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {useDispatch, useSelector} from 'react-redux';
-import {getHome} from '../Redux/actionHome';
+import {addItem, getHome, postData} from '../Redux/actionHome';
 import Poppin from '../Component/Poppin';
 import {PopUp, ModalInput} from '../Component/Modal';
 
@@ -24,10 +24,24 @@ export default function Home() {
   const [ModalVisible, setModalVisible] = useState(false);
   const [ModalInputVisible, setModalInputVisible] = useState(false);
   const [DataModal, setDataModal] = useState({});
+  const [titleInput, setTitleInput] = useState('');
+  const [bodyInput, setBodyInput] = useState('');
 
   useEffect(() => {
     dispatch(getHome());
   }, []);
+
+  const submitAddData = () => {
+    const idData = DataReducerHome.id + 1;
+    const newData = {
+      id: idData,
+      title: titleInput,
+      body: bodyInput,
+    };
+    dispatch(postData(newData));
+    dispatch(addItem(newData));
+    setModalInputVisible(false);
+  };
 
   const DataReducerHome = useSelector(state => state.ReducerHome?.data);
   return (
@@ -36,7 +50,6 @@ export default function Home() {
       <ScrollView style={styles.scroll}>
         <View style={styles.wrap}>
           {DataReducerHome.map((e, i) => {
-            console.log(e.title, 'INI TESTT');
             return (
               <TouchableOpacity
                 onPress={() => {
@@ -89,12 +102,18 @@ export default function Home() {
           setModalVisible(false);
         }}
         data={DataModal}
+        onClose={() => {
+          setModalVisible(false);
+        }}
       />
       <ModalInput
         visibleInput={ModalInputVisible}
         onRequestCloseInput={() => {
           setModalInputVisible(false);
         }}
+        onChangeTextTitle={text => setTitleInput(text)}
+        onChangeTextBody={text => setBodyInput(text)}
+        onPress={submitAddData}
       />
     </View>
   );
