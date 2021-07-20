@@ -3,14 +3,14 @@ export const SET_HOME = 'SET_HOME';
 
 export const getHome = payload => {
   return {
-    type: GET_HOME,
+    type: 'GET_HOME',
     payload,
   };
 };
 
 export const setHome = payload => {
   return {
-    type: SET_HOME,
+    type: 'SET_HOME',
     payload,
   };
 };

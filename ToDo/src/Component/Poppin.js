@@ -9,6 +9,7 @@ export default function Poppin({
   size = 16,
   alignSelf,
   style,
+  numberOfLines = 5,
 }) {
   const styles = StyleSheet.create({
     textStyle: {
@@ -19,5 +20,9 @@ export default function Poppin({
       ...style,
     },
   });
-  return <Text style={styles.textStyle}>{children}</Text>;
+  return (
+    <Text numberOfLines={numberOfLines} style={styles.textStyle}>
+      {children}
+    </Text>
+  );
 }
