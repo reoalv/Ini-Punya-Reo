@@ -39,7 +39,7 @@ export default function Home() {
       body: bodyInput,
     };
     dispatch(postData(newData));
-    dispatch(addItem(newData));
+    // dispatch(addItem(newData));
     setModalInputVisible(false);
   };
 
@@ -49,7 +49,7 @@ export default function Home() {
       <Header />
       <ScrollView style={styles.scroll}>
         <View style={styles.wrap}>
-          {DataReducerHome.map((e, i) => {
+          {DataReducerHome?.map((e, i) => {
             return (
               <TouchableOpacity
                 onPress={() => {

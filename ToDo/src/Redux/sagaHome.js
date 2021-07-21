@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {put, takeLatest} from 'redux-saga/effects';
-import {GET_HOME, POST_DATA, REMOVE_HOME, setHome} from './actionHome';
+import {addItem, GET_HOME, POST_DATA, REMOVE_HOME, setHome} from './actionHome';
 
 function* dataHome() {
   try {
@@ -24,8 +24,8 @@ function* postData(action) {
       data: action.payload,
     });
     console.log(res, 'INI KEMBALIAN POST');
-    if (res.status === 200) {
-      yield put(setHome(res.data));
+    if (res.status === 201) {
+      yield put(addItem(res.data));
     }
   } catch (e) {
     console.log(e);
@@ -33,7 +33,17 @@ function* postData(action) {
 }
 
 function* removeData(action) {
-  console.log(action, 'INI LHOOO');
+  console.log(action.payload.id, 'INI LHOOO');
+  const idDelete = action.payload.id;
+  try {
+    const res = yield axios({
+      method: 'delete',
+      url: `https://jsonplaceholder.typicode.com/posts/${idDelete}`,
+    });
+    console.log(res, 'INI KEMBALIAN REMOVE');
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 function* sagaHome() {

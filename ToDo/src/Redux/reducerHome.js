@@ -4,10 +4,6 @@ const initialState = {
   data: [],
 };
 
-/* KARENA PAKE FAKE API KALO DI DELETE/POST API NYA GAK UPDATE
-JADI SAYA AKALIN LANGSUNG LEMPAR KE REDUCER JUGA
-SUPAYA SECARA TAMPILAN JUGA UPDATE */
-
 const reducerHome = (state = initialState, action) => {
   switch (action.type) {
     case SET_HOME:
