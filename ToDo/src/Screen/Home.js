@@ -19,7 +19,7 @@ import {addItem, getHome, postData} from '../Redux/actionHome';
 import Poppin from '../Component/Poppin';
 import {PopUp, ModalInput} from '../Component/Modal';
 
-export default function Home() {
+export default function Home(props) {
   const dispatch = useDispatch();
   const [ModalVisible, setModalVisible] = useState(false);
   const [ModalInputVisible, setModalInputVisible] = useState(false);
@@ -46,7 +46,7 @@ export default function Home() {
   const DataReducerHome = useSelector(state => state.ReducerHome?.data);
   return (
     <View style={styles.outerContainer}>
-      <Header />
+      <Header onPress={() => props.navigation.navigate('Location')} />
       <ScrollView style={styles.scroll}>
         <View style={styles.wrap}>
           {DataReducerHome?.map((e, i) => {

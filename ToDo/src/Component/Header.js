@@ -8,7 +8,7 @@ import Poppin from './Poppin';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {moderateScale} from 'react-native-size-matters';
 
-export default function Header() {
+export default function Header({onPress}) {
   return (
     <View style={styles.container}>
       <View style={styles.between}>
@@ -16,7 +16,10 @@ export default function Header() {
         <Poppin alignSelf="center" color="#acb8c5" size={20} type="Bold">
           CatatanQ
         </Poppin>
-        <TouchableOpacity activeOpacity={0.4} style={styles.icon}>
+        <TouchableOpacity
+          onPress={onPress}
+          activeOpacity={0.4}
+          style={styles.icon}>
           <Ionicons name="location" size={24} color="#acb8c5" />
         </TouchableOpacity>
       </View>
