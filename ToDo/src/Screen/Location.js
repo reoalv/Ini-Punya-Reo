@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {LogBox, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {
   heightPercentageToDP,
   widthPercentageToDP,
@@ -7,11 +7,75 @@ import {
 import Poppin from '../Component/Poppin';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {moderateScale} from 'react-native-size-matters';
+import RNLocation from 'react-native-location';
 
 export default function Location(props) {
   const [ShowLocation, setShowLocation] = useState(false);
+  const [onLatitude, setOnLatitude] = useState('');
+  const [onLongitude, setOnLongitude] = useState('');
 
-  const ShowLocationButton = () => {
+  useEffect(() => {
+    LogBox.ignoreLogs(['Provider gps is temporarily unavailable.']);
+  }, []);
+
+  RNLocation.configure({
+    distanceFilter: 5.0,
+  });
+
+  const getPermission = async () => {
+    // try {
+    //   const granted = await PermissionsAndroid.request(
+    //     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    //     {
+    //       title: 'Cool App Location Permission',
+    //       message: 'Cool App needs access to your location ',
+    //       buttonNeutral: 'Ask Me Later',
+    //       buttonNegative: 'Cancel',
+    //       buttonPositive: 'OK',
+    //     },
+    //   );
+    //   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+    //     console.log('Now you can use geolocation!');
+    //   } else {
+    //     console.log('Location permission denied');
+    //   }
+    // } catch (err) {
+    //   console.warn(err);
+    // }
+
+    console.log('here');
+    let permission = await RNLocation.checkPermission({
+      ios: 'whenInUse', // or 'always'
+      android: {
+        detail: 'coarse', // or 'fine'
+      },
+    });
+    console.log(permission, 'PERMISSION');
+    let location;
+    if (!permission) {
+      const permission = await RNLocation.requestPermission({
+        ios: 'whenInUse',
+        android: {
+          detail: 'coarse',
+          rationale: {
+            title: 'We need to access your location',
+            message: 'We use your location to show where you are on the map',
+            buttonPositive: 'OK',
+            buttonNegative: 'Cancel',
+          },
+        },
+      });
+      console.log(permission, 'PERMISSION2');
+      location = await RNLocation.getLatestLocation({timeout: 100});
+      console.log(location.longitude, location.latitude);
+      setShowLocation(!ShowLocation);
+    } else {
+      location = await RNLocation.getLatestLocation({timeout: 100});
+      console.log(location.longitude, location.latitude);
+    }
+    console.log(location.longitude, location.latitude);
+    setOnLatitude(location.latitude);
+    setOnLongitude(location.latitude);
     setShowLocation(!ShowLocation);
   };
   return (
@@ -35,7 +99,7 @@ export default function Location(props) {
         <TouchableOpacity
           activeOpacity={0.6}
           style={styles.button}
-          onPress={ShowLocationButton}>
+          onPress={getPermission}>
           <Poppin type="SemiBold">
             {ShowLocation ? 'CLOSE' : 'GET LOCATION'}
           </Poppin>
@@ -44,18 +108,18 @@ export default function Location(props) {
           <View style={styles.mainBody}>
             <View style={styles.content}>
               <Poppin size={18} color="#acb8c5">
-                Latitude:{' '}
+                Latitude:
               </Poppin>
               <Poppin size={22} color="#acb8c5">
-                00000
+                {onLatitude}
               </Poppin>
             </View>
             <View style={styles.content}>
               <Poppin size={18} color="#acb8c5">
-                Longitude:{' '}
+                Longitude:
               </Poppin>
               <Poppin size={22} color="#acb8c5">
-                00000
+                {onLongitude}
               </Poppin>
             </View>
           </View>
