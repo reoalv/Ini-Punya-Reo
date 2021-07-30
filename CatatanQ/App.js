@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
+import Poppin from './src/Component/Poppin';
 
 export default function App() {
   setTimeout(() => {
@@ -9,7 +10,7 @@ export default function App() {
 
   return (
     <View>
-      <Text>Test</Text>
+      <Poppin>Test</Poppin>
     </View>
   );
 }
