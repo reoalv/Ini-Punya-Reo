@@ -17,7 +17,6 @@ const reducerHome = (state = initialState, action) => {
         data: [...state.data, action.payload],
       };
     case REMOVE_HOME:
-      console.log(action.payload, 'INI REDUCER');
       return {
         ...state,
         data: state.data.filter(i => i.id !== action.payload.id),

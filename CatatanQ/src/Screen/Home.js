@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
+  RefreshControl,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -35,6 +36,20 @@ export default function Home(props) {
   //setsearch
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    wait(300).then(() => {
+      setRefreshing(false);
+    });
+    return setFilteredDataSource(DataReducerHome), setSearch('');
+  };
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -86,7 +101,6 @@ export default function Home(props) {
       // Update FilteredDataSource with masterDataSource
       setFilteredDataSource(DataReducerHome);
       setSearch(text);
-      console.log(filteredDataSource, 'INI COYYY');
     }
   };
 
@@ -102,7 +116,7 @@ export default function Home(props) {
     setModalInputVisible(false);
   };
 
-  const xButton = () => {
+  const clearButton = () => {
     return setFilteredDataSource(DataReducerHome), setSearch('');
   };
 
@@ -117,7 +131,7 @@ export default function Home(props) {
             value={search}
             style={{flex: 1}}
           />
-          <TouchableOpacity onPress={xButton} style={{alignSelf: 'center'}}>
+          <TouchableOpacity onPress={clearButton} style={{alignSelf: 'center'}}>
             <Poppin
               size={12}
               color="#B3B6B9"
@@ -130,10 +144,13 @@ export default function Home(props) {
       ) : (
         <View />
       )}
-      <ScrollView style={styles.scroll}>
+      <ScrollView
+        style={styles.scroll}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View style={styles.wrap}>
           {filteredDataSource?.map((e, i) => {
-            console.log(filteredDataSource, 'INI MAPNYAAA');
             return (
               <TouchableOpacity
                 onPress={() => {
@@ -201,6 +218,7 @@ export default function Home(props) {
         data={DataModal}
         onClose={() => {
           setModalVisible(false);
+          setFilteredDataSource(DataReducerHome);
         }}
       />
       <ModalInput

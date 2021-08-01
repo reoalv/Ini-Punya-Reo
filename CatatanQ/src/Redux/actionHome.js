@@ -19,7 +19,6 @@ export const setHome = payload => {
 };
 
 export const setRemove = payload => {
-  console.log(payload, 'INI ACTION DELETE');
   return {
     type: 'REMOVE_HOME',
     payload,

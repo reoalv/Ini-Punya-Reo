@@ -25,34 +25,12 @@ export default function Location(props) {
   });
 
   const getPermission = async () => {
-    // try {
-    //   const granted = await PermissionsAndroid.request(
-    //     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    //     {
-    //       title: 'Cool App Location Permission',
-    //       message: 'Cool App needs access to your location ',
-    //       buttonNeutral: 'Ask Me Later',
-    //       buttonNegative: 'Cancel',
-    //       buttonPositive: 'OK',
-    //     },
-    //   );
-    //   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-    //     console.log('Now you can use geolocation!');
-    //   } else {
-    //     console.log('Location permission denied');
-    //   }
-    // } catch (err) {
-    //   console.warn(err);
-    // }
-
-    console.log('here');
     let permission = await RNLocation.checkPermission({
       ios: 'whenInUse', // or 'always'
       android: {
         detail: 'coarse', // or 'fine'
       },
     });
-    console.log(permission, 'PERMISSION');
     let location;
     try {
       if (!permission) {
@@ -68,15 +46,11 @@ export default function Location(props) {
             },
           },
         });
-        console.log(permission, 'PERMISSION2');
         location = await RNLocation.getLatestLocation({timeout: 100});
-        console.log(location.longitude, location.latitude);
         setShowLocation(!ShowLocation);
       } else {
         location = await RNLocation.getLatestLocation({timeout: 100});
-        console.log(location.longitude, location.latitude);
       }
-      console.log(location.longitude, location.latitude);
       setOnLatitude(location.latitude);
       setOnLongitude(location.latitude);
       setShowLocation(!ShowLocation);

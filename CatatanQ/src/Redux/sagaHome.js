@@ -23,7 +23,6 @@ function* postData(action) {
       url: 'https://jsonplaceholder.typicode.com/posts?userId=1',
       data: action.payload,
     });
-    console.log(res, 'INI KEMBALIAN POST');
     if (res.status === 201) {
       yield put(addItem(res.data));
     }
@@ -33,14 +32,12 @@ function* postData(action) {
 }
 
 function* removeData(action) {
-  console.log(action.payload.id, 'INI LHOOO');
   const idDelete = action.payload.id;
   try {
     const res = yield axios({
       method: 'delete',
       url: `https://jsonplaceholder.typicode.com/posts/${idDelete}`,
     });
-    console.log(res, 'INI KEMBALIAN REMOVE');
   } catch (e) {
     console.log(e);
   }

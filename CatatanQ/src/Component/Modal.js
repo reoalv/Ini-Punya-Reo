@@ -21,13 +21,12 @@ import {useDispatch} from 'react-redux';
 import {setRemove} from '../Redux/actionHome';
 
 export function PopUp({visible, onRequestClose, data, onClose}) {
-  const [dataDelete, setDataDelete] = useState({});
+  // const [dataDelete, setDataDelete] = useState({});
   const dispatch = useDispatch();
-  const deleting = () => {
-    dispatch(setRemove(dataDelete));
+  const deleting = item => {
+    dispatch(setRemove(item));
     onClose();
   };
-  console.log(data.id);
 
   return (
     <Modal
@@ -55,22 +54,22 @@ export function PopUp({visible, onRequestClose, data, onClose}) {
               {data.title}
             </Poppin>
             <TouchableOpacity
-              onPress={() => {
-                setDataDelete(data),
-                  Alert.alert(
-                    'Delete',
-                    'Do You Want Delete This?',
-                    [
-                      {
-                        text: 'No',
-                        onPress: () => console.log('Pressed No'),
-                        style: 'cancel',
-                      },
-                      {text: 'Yes', onPress: deleting},
-                    ],
-                    {cancelable: true},
-                  );
-              }}
+              onPress={() =>
+                // setDataDelete(data),
+                Alert.alert(
+                  'Delete',
+                  'Do You Want Delete This?',
+                  [
+                    {
+                      text: 'No',
+                      onPress: () => console.log('Pressed No'),
+                      style: 'cancel',
+                    },
+                    {text: 'Yes', onPress: () => deleting(data)},
+                  ],
+                  {cancelable: true},
+                )
+              }
               style={styles.trash}>
               <FontAwesome5 name="trash" size={20} />
             </TouchableOpacity>
