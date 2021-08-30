@@ -45,6 +45,17 @@
 @import "offcanvas";
 @import "placeholders";
 
+.brand-text-icon {
+  font-size: 26px;
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+  color: $primary;
+}
+
+.text-gray-900 {
+  color: $gray-900;
+}
+
 // Helpers
 @import "helpers";
 
