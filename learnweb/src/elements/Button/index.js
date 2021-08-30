@@ -15,7 +15,7 @@ export default function Button(props) {
   };
 
   if (props.isDisabled || props.isLoading) {
-    if (isDisable) className.push("disabled");
+    if (props.isDisabled) className.push("disabled");
     return (
       <span className={className.join(" ")} style={props.style}>
         {props.isLoading ? (
